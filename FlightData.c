@@ -9,7 +9,7 @@
 
 int calcArr2400(int iDepTime2400, int iDurationMins, int iZoneChange)
 {
-    // do stuff
+    // schmelly
 }
 
 int findAirport(Graph graph, char szAirport[])
