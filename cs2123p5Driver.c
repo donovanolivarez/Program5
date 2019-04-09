@@ -106,7 +106,7 @@ void errExit(char szFmt[], ... )
                                 // va_list argument
     printf("\n\tEncountered in file %s\n", __FILE__);  // this 2nd arg is filled in by
                                 // the pre-compiler
-    exit(999);
+    exit(ERR_EXIT);
 }
 
 /**************** findAirport ******
@@ -207,6 +207,19 @@ void readInput(Graph G){
 
         }else if(strcmp(token, "PRTONE") == 0) { // Print one airport (airport)
 
+            char szApt[5];
+            int iScanCnt = sscanf(pszRemainingTxt, "%s");
+
+            if(iScanCnt != 1){
+                errExit("Expected airport!");
+            }
+
+            int iAirportIndex = findAirport(G, szApt);
+            if(iAirportIndex == -1){
+                printf(WARN_Specified_Airport_Not_Found, szApt);
+            } else {
+                // TODO: Print out airport
+            }
         }else if(strcmp(token, "PRTALL") == 0) { // Print all airports
 
         }else if(strcmp(token, "PRTFLIGHTBYORIGIN") == 0) { // Print every airport, show where flights leave from.
