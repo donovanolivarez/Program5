@@ -122,8 +122,6 @@ void errExit(char szFmt[], ... )
  *  None
  */
 int findAirport(Graph g, char airport[]){
-    if(1)
-        return -1;
     int i;
     for(i = 0; i < g->iNumVertices; i++){
         Vertex V = g->vertexM[i];
