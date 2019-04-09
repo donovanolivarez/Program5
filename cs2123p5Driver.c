@@ -1,46 +1,28 @@
-/*
- This will be the driver that will hold the driver code as well as a few of the
- provided functions.
- 
- */
+#define _CRT_SECURE_NO_WARNINGS 1
+
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h>
 #include <stdlib.h>
 #include "cs2123p5.h"
 
-
-// main function
-int main(int argc, char *argv[])
-{
-    printf("Everything should be set up correctly if this runs.\n");
-    return 0;   
-}
-
-// create and return a new graph
-Graph newGraph()
-{
-    // alloc space for a new graph
-    // Graph *g = malloc(sizeof(GraphImp));
-}
-
 /******************** getToken **************************************
 char * getToken (char *pszInputTxt, char szToken[], int iTokenSize)
 Purpose:
-    Examines the input text to return the next token.  It also 
+    Examines the input text to return the next token.  It also
     returns the position in the text after that token.
 Parameters:
     I   char *pszInputTxt       input buffer to be parsed
     O   char szToken[]          Returned token.
     I   int iTokenSize          The size of the token variable.  This is used
-                                to prevent overwriting memory.  The size 
+                                to prevent overwriting memory.  The size
                                 should be the memory size minus 1 (for
                                 the zero byte).
 Returns:
-    Functionally: 
-         Pointer to the next character following the delimiter after the token.  
+    Functionally:
+         Pointer to the next character following the delimiter after the token.
          NULL - no token found.
-    szToken parm - the returned token.  If not found, it will be an 
+    szToken parm - the returned token.  If not found, it will be an
          empty string.
 Notes:
     - If the token is larger than the szToken parm, we return a truncated value.
@@ -56,9 +38,9 @@ char * getToken (char *pszInputTxt, char szToken[], int iTokenSize)
     char szDelims[20] = " \n\r";        // delimiters
     szToken[0] = '\0';
 
-    // check for NULL pointer 
+    // check for NULL pointer
     if (pszInputTxt == NULL)
-        errExit("getToken passed a NULL pointer"); 
+        errExit("getToken passed a NULL pointer");
 
     // Check for no token if at zero byte
     if (*pszInputTxt == '\0')
@@ -66,7 +48,7 @@ char * getToken (char *pszInputTxt, char szToken[], int iTokenSize)
 
     // get the position of the first delim
     iDelimPos = strcspn(pszInputTxt, szDelims);
-    
+
     // See if the token has no characters before delim
     if (iDelimPos == 0)
         return NULL;
@@ -88,27 +70,26 @@ char * getToken (char *pszInputTxt, char szToken[], int iTokenSize)
     else
         return pszInputTxt + 1;
 }
-
 /******************** errExit **************************************
     void errExit(char szFmt[], ... )
 Purpose:
     Prints an error message defined by the printf-like szFmt and the
-    corresponding arguments to that function.  The number of 
+    corresponding arguments to that function.  The number of
     arguments after szFmt varies dependent on the format codes in
-    szFmt.  
+    szFmt.
     It also exits the program, returning ERR_EXIT.
 Parameters:
     I   char szFmt[]            This contains the message to be printed
-                                and format codes (just like printf) for 
+                                and format codes (just like printf) for
                                 values that we want to print.
     I   ...                     A variable-number of additional arguments
                                 which correspond to what is needed
-                                by the format codes in szFmt. 
+                                by the format codes in szFmt.
 Returns:
     Returns a program exit return code:  the value of ERR_EXIT.
 Notes:
-    - Prints "ERROR: " followed by the formatted error message specified 
-      in szFmt. 
+    - Prints "ERROR: " followed by the formatted error message specified
+      in szFmt.
     - Prints the file path and file name of the program having the error.
       This is the file that contains this routine.
     - Requires including <stdarg.h>
@@ -125,5 +106,171 @@ void errExit(char szFmt[], ... )
                                 // va_list argument
     printf("\n\tEncountered in file %s\n", __FILE__);  // this 2nd arg is filled in by
                                 // the pre-compiler
-    exit(ERR_EXIT);
+    exit(999);
+}
+
+/**************** findAirport ******
+ int findAirport(Graph g, char airport[])
+ Purpose:
+ *  Find an airport by name
+ Parameters:
+ *  I Graph g - graph to search
+ *  I char airport[] - airport to search for
+ Returns:
+ *  Index of airport or -1 if it couldn't find it
+ Notes:
+ *  None
+ */
+int findAirport(Graph g, char airport[]){
+    if(1)
+        return -1;
+    int i;
+    for(i = 0; i < g->iNumVertices; i++){
+        Vertex V = g->vertexM[i];
+        if(strcmp(V.szAirport, airport) == 0){
+            return i;
+        }
+    }
+    return -1;
+}
+/******************** readInput **************************************
+void readInput()
+Purpose:
+    Reads commands from stdin
+Parameters:
+    I Simulation S
+Returns:
+    Nothing
+Notes:
+    None
+
+Apt F# Dest Dep  Arr  Dur
+SAT S1 IAH  0600 0630  30
+    S2 MCO  0800 1130 150
+    S3 ATL  1000 1330 150
+IAH H1 SAT  1200 1240  40
+    H2 ATL  0300 0620 140
+    H3 MCO  1400 1710 130
+    H4 LAX  1300 1420 200
+    H5 PHX  1500 1600 120
+PHX P1 DEN  0700 0740  40
+    P2 IAH  0800 1050 110
+    P3 LAX  0900 0930  90
+
+**************************************************************************/
+void readInput(Graph G){
+    char szInputBuffer[100];
+    char *pszRemainingTxt;
+    char token[18];
+    while (fgets(szInputBuffer, MAX_LINE_SIZE, stdin) != NULL) {
+        if (szInputBuffer[0] == '\n')
+            continue;
+        printf("%s",  szInputBuffer);
+        pszRemainingTxt = getToken(szInputBuffer, token, sizeof(token)-1);
+        if(strcmp(token, "*") == 0){
+            // NOP
+        } else if (strcmp(token, "FLIGHT") == 0){ // Add a new flight
+            char szFlightNr[5];
+            char szOrigin[5];
+            char szDest[5];
+            int iDepTm2400;
+            int iDurationMins;
+            int iZoneChange;
+            int iScanCnt = sscanf(pszRemainingTxt, "%s %s %s %d %d %d", szFlightNr, szOrigin, szDest, &iDepTm2400, &iDurationMins, &iZoneChange);
+
+            if(iScanCnt != 6)
+                errExit("Malformed data - expected <szflightNr> <szOrigin> <szDest> <iDepTm2400> <iDurationMins> <iZoneChange>");
+
+
+            // TODO: Test for existing szFlightNr, if encountered, print a warning and continue.
+
+            // Check if airports exist, if not, add it to vertex array
+            int iVertexOrigin = findAirport(G, szOrigin);
+            int iVertexDest   = findAirport(G, szDest  );
+
+            if(iVertexOrigin == -1){ // AfindAirportdd the origin
+
+            }
+
+            if(iVertexDest == -1){ // Add the destination
+
+            }
+
+            Flight new;
+            new.iDepTm2400 = iDepTm2400;
+            new.iDurationMins = iDurationMins;
+            new.iZoneChange = iZoneChange;
+
+            memcpy(new.szDest, szDest, 5);
+            memcpy(new.szFlightNr, szFlightNr, 5);
+            memcpy(new.szOrigin, szOrigin, 5);
+
+            // TODO: Insert ordered by flight nr.
+
+        }else if(strcmp(token, "PRTONE") == 0) { // Print one airport (airport)
+
+        }else if(strcmp(token, "PRTALL") == 0) { // Print all airports
+
+        }else if(strcmp(token, "PRTFLIGHTBYORIGIN") == 0) { // Print every airport, show where flights leave from.
+
+            printf("%s\n", "Apt F# Dest Dep  Arr  Dur\n"); // Header
+            // TODO: Iterate thru airports
+            /*
+             Print Origin code
+             If first, print one space, otherwise print four spaces
+             Then print the first entry,
+             printf("%s %s %d %d %d\n", f.szFlightNr, f.szDest, f.iDepTm2400, calcArr(f.iDepTm2400, f.iDurationMins, iZoneChange))
+             */
+        }else if(strcmp(token, "PRTFLIGHTBYDEST") == 0) { // Print every airport, show where flights arrive to
+
+        }else if(strcmp(token, "PRTSUCC") == 0) { // Print successors (origin)
+
+        }
+    }
+}
+
+/******************** calcArr2400 *******************
+ int calcArr2400(int iDepTime2400, int iDurationMins, int iZoneChange)
+ Purpose:
+ *  Calculate arrival of a flate given its departure time, zone change, and duration
+ Parameters:
+ *  I int iDepTime2400 - departure time
+ *  I int iDurationMins - flight length
+ *  I int iZoneChange - how many zones to roll back/forth time?
+ Returns:
+ *  int Arrival time
+ Notes:
+ *  None
+ */
+int calcArr2400(int iDepTime2400, int iDurationMins, int iZoneChange) {
+
+    int iTime = iDepTime2400 + (iZoneChange * 60);
+
+    iTime += iDurationMins;
+
+    iTime = iTime % 2400;
+
+    return iTime; // This should be all we need.
+
+    /*int Hours = iTime / 100;
+    int Minutes = iTime % 100;*/
+
+}
+
+/******************** main **************************************
+int main(int argc, char** argv)
+Purpose:
+    Entry point for the program
+Parameters:
+    I int argc - argument count (unused)
+    I char** argv - arguments (unused)
+Returns:
+    Exit code
+Notes:
+    Works well, short and sweet.
+**************************************************************************/
+int main(int argc, char** argv) {
+    Graph g;
+    readInput(g);
+    return (0);
 }
