@@ -29,7 +29,42 @@ void prtOne(Graph graph, int iVertex)
 
 void prtFlightsByOrigin(Graph graph)
 {
-    // do stuff
+    // local variables to hold flight information 
+    int i,j, iDeparture, iArrival, iDuration, iFirst, iZoneChange;
+    char szAirport[MAX_TOKEN]; 
+    char szFlightNr[MAX_TOKEN];
+    char szDest[MAX_TOKEN];
+    EdgeNode *p;
+    
+    for (i = 0; i < graph->iNumVertices; i++)
+    {
+        
+        // represents that we are at the first node in the list
+        iFirst = TRUE;
+        
+        for (p = graph->vertexM[i].successorList; p != NULL; p = p->pNextEdge)
+        {
+
+            // copy info to local variables
+            strcpy(szAirport, graph->vertexM[i].szAirport);
+            strcpy(szFlightNr, p->flight.szFlightNr);
+            strcpy(szDest,p->flight.szDest);
+            iDeparture = p->flight.iDepTm2400;
+            iDuration = p->flight.iDurationMins;
+            iZoneChange = p->flight.iZoneChange;
+            iArrival = calcArr2400(iDeparture, iDuration, iZoneChange);
+    
+            // if first node in list, print out with appropriate format
+            if (iFirst == TRUE)
+                printf("%-s %s %s %4d %4d %4d\n", szAirport, szFlightNr,szDest,iDeparture, iArrival, iDuration );
+            
+            // if not first node, print out with appropriate format
+            if (iFirst == FALSE)
+                printf("%6s %s %4d %4d %4d\n", szFlightNr,szDest,iDeparture, iArrival,iDuration );
+            
+            iFirst = FALSE;   
+        }
+    }
 }
 
 void prtFlightsByDest(Graph graph)
