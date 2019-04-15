@@ -26,7 +26,17 @@ void prtOne(Graph graph, int iVertex)
 {
     // do stuff
 }
-
+/********************** prtFlightsByOrigin ************************
+ void prtFlightsByOrigin(Graph graph)
+ Purpose:
+    for each airport, prints out the flights where it is the origin.
+ Parameters:
+    I  Graph graph - a pointer to the graph.
+ Returns:
+    Nothing
+ Notes:
+    Uses the vertex successor list to print correct data.
+ ****************************************************************/
 void prtFlightsByOrigin(Graph graph)
 {
     // local variables to hold flight information 
@@ -66,7 +76,17 @@ void prtFlightsByOrigin(Graph graph)
         }
     }
 }
-
+/********************** prtFlightsByDest ************************
+ void prtFlightsByDest(Graph graph)
+ Purpose:
+    for each airport, prints out the flights where it is the destination.
+ Parameters:
+    I   Graph graph - a pointer to the graph.
+ Returns:
+    Nothing
+ Notes:
+    Uses the vertex predecessor list to print correct data.
+ ****************************************************************/
 void prtFlightsByDest(Graph graph)
 {   
     int i, iFirst, iDeparture, iDuration, iZoneChange, iArrival;
