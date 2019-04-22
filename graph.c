@@ -17,7 +17,17 @@ Graph newGraph()
     return graph;
 }
 
-
+/********************** setNotVisited *************************
+void setNotVisited(Graph graph)
+ Purpose:
+    For each vertex in the graph, it sets the bVisited flag to FALSE.
+ Parameters:
+    I  Graph graph - a pointer to the graph of flights/airports
+ Returns:
+    N/A
+ Notes:
+    N/A
+ ****************************************************************/
 void setNotVisited(Graph graph)
 {
     // do stuff
