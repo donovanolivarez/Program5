@@ -206,3 +206,29 @@ EdgeNode *allocNodeLL(EdgeNode *list, Flight flight)
     
     return pNew;
 }
+
+/************************* removeLL ***************************
+ Purpose:
+    This function handles the removal of a node in the linked list.
+ Parameters:
+    I/O    LinkedList list - pointer to a linked list. In this case, the list of events.
+ Returns:
+    TRUE   -   returned if node was successfully removed.
+    FALSE  -   returned if list is empty.
+ Notes:
+    - The next node in the list becomes the new head in the list, while 
+      the head is freed. 
+ *******************************************************************/
+int removeLL(EdgeNode *list )
+{
+    // points to node being removed 
+    EdgeNode *pRemove;
+    if (list == NULL)
+        return FALSE;
+    // return the event value via pEvent
+    pRemove = list;
+    list = list->pNextEdge;
+    free(pRemove);
+    
+    return TRUE;
+}
