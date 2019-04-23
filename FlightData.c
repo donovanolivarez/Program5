@@ -23,20 +23,24 @@ EdgeNode *allocNodeLL(EdgeNode *list, Flight flight);
  *  int Arrival time
  Notes:
  *  None
- */
-int calcArr2400(int iDepTime2400, int iDurationMins, int iZoneChange) {
-
-    int iTime = iDepTime2400 + (iZoneChange * 60);
-
-    iTime += iDurationMins;
-
-    iTime = iTime % 2400;
-
-    return iTime; // This should be all we need.
-
-    /*int Hours = iTime / 100;
-    int Minutes = iTime % 100;*/
-
+ *****************************************************/
+int calcArr2400(int iDepTime2400, int iDurationMins, int iZoneChange) 
+{
+    // get the hours and minutes of iDepTime2400, calculate total minutes since midnight.
+    int iHours = iDepTime2400 / 100;
+    int iMinutes = iDepTime2400 % 100;
+    int iTotalMinutes = iHours * 60 + iMinutes;
+    
+    // get zone change in minutes.
+    int iZoneChangeMins = (iZoneChange * 60);
+    
+    // calculate iArrival and convert from minutes to a 2400 time.
+    int iArrival = iTotalMinutes + iDurationMins + iZoneChangeMins;
+    int iArrHours2400 = iArrival/60 * 100;
+    int iArrMins2400 = iArrival % 60;
+    iArrival = iArrHours2400 + iArrMins2400;
+    
+    return iArrival;    
 }
 
 
