@@ -109,28 +109,6 @@ void errExit(char szFmt[], ... )
     exit(ERR_EXIT);
 }
 
-/**************** findAirport ******
- int findAirport(Graph g, char airport[])
- Purpose:
- *  Find an airport by name
- Parameters:
- *  I Graph g - graph to search
- *  I char airport[] - airport to search for
- Returns:
- *  Index of airport or -1 if it couldn't find it
- Notes:
- *  None
- */
-int findAirport(Graph g, char airport[]){
-    int i;
-    for(i = 0; i < g->iNumVertices; i++){
-        Vertex V = g->vertexM[i];
-        if(strcmp(V.szAirport, airport) == 0){
-            return i;
-        }
-    }
-    return -1;
-}
 /******************** readInput **************************************
 void readInput()
 Purpose:
@@ -187,11 +165,11 @@ void readInput(Graph G){
             int iVertexDest   = findAirport(G, szDest  );
 
             if(iVertexOrigin == -1){ // AfindAirportdd the origin
-
+                addVertex(G, szOrigin);
             }
 
             if(iVertexDest == -1){ // Add the destination
-
+                addVertex(G, szDest);
             }
 
             Flight new;
@@ -199,12 +177,12 @@ void readInput(Graph G){
             new.iDurationMins = iDurationMins;
             new.iZoneChange = iZoneChange;
 
-            memcpy(new.szDest, szDest, 5);
-            memcpy(new.szFlightNr, szFlightNr, 5);
-            memcpy(new.szOrigin, szOrigin, 5);
+            strcpy(new.szDest, szDest);
+            strcpy(new.szFlightNr, szFlightNr);
+            strcpy(new.szOrigin, szOrigin);
 
             // TODO: Insert ordered by flight nr.
-
+            insertFlight(G, new);
         }else if(strcmp(token, "PRTONE") == 0) { // Print one airport (airport)
 
             char szApt[5];
@@ -219,54 +197,45 @@ void readInput(Graph G){
                 printf(WARN_Specified_Airport_Not_Found, szApt);
             } else {
                 // TODO: Print out airport
+                prtOne(G, iAirportIndex);
             }
         }else if(strcmp(token, "PRTALL") == 0) { // Print all airports
-
+            prtAll(G);
         }else if(strcmp(token, "PRTFLIGHTBYORIGIN") == 0) { // Print every airport, show where flights leave from.
-
-            printf("%s\n", "Apt F# Dest Dep  Arr  Dur\n"); // Header
             // TODO: Iterate thru airports
-            /*
-             Print Origin code
-             If first, print one space, otherwise print four spaces
-             Then print the first entry,
-             printf("%s %s %d %d %d\n", f.szFlightNr, f.szDest, f.iDepTm2400, calcArr(f.iDepTm2400, f.iDurationMins, iZoneChange))
-             */
+            printf("%s\n", "Apt F# Dest Dep  Arr  Dur\n");
+            prtFlightsByOrigin(G);
+
         }else if(strcmp(token, "PRTFLIGHTBYDEST") == 0) { // Print every airport, show where flights arrive to
-
+            printf("%s\n", "Apt Orig Fl Dep  Arr  Dur\n");
+            prtFlightsByDest(G);
         }else if(strcmp(token, "PRTSUCC") == 0) { // Print successors (origin)
+            char szApt[5];
+            int iScanCnt = sscanf(pszRemainingTxt, "%s", szApt);
 
+            if(iScanCnt != 1){
+                errExit("Expected airport!");
+            }
+            int iAirportIndex = findAirport(G, szApt);
+            prtTraversal(G, iAirportIndex, 0);
+            setNotVisited(G);
+        }else if(strcmp(token, "PRTCHRON") == 0) {
+            
+            char szApt[5];
+            int iScanCnt = sscanf(pszRemainingTxt, "%s", szApt);
+
+            if(iScanCnt != 1){
+                errExit("Expected airport!");
+            }
+            int iAirportIndex = findAirport(G, szApt);
+            int iIndent = 0;
+            int iPrevArrTm2400 = 0;
+            prtTraversalChron(G, iAirportIndex, iIndent,iPrevArrTm2400 );
+            setNotVisited(G);
         }
     }
 }
 
-/******************** calcArr2400 *******************
- int calcArr2400(int iDepTime2400, int iDurationMins, int iZoneChange)
- Purpose:
- *  Calculate arrival of a flate given its departure time, zone change, and duration
- Parameters:
- *  I int iDepTime2400 - departure time
- *  I int iDurationMins - flight length
- *  I int iZoneChange - how many zones to roll back/forth time?
- Returns:
- *  int Arrival time
- Notes:
- *  None
- */
-int calcArr2400(int iDepTime2400, int iDurationMins, int iZoneChange) {
-
-    int iTime = iDepTime2400 + (iZoneChange * 60);
-
-    iTime += iDurationMins;
-
-    iTime = iTime % 2400;
-
-    return iTime; // This should be all we need.
-
-    /*int Hours = iTime / 100;
-    int Minutes = iTime % 100;*/
-
-}
 
 /******************** main **************************************
 int main(int argc, char** argv)
@@ -281,7 +250,7 @@ Notes:
     Works well, short and sweet.
 **************************************************************************/
 int main(int argc, char** argv) {
-    Graph g;
+    Graph g = newGraph();
     readInput(g);
     return (0);
 }
