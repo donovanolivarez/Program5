@@ -9,7 +9,17 @@
 #include "cs2123p5.h"
 
 
-// return a new graph
+/******************** newGraph *************************
+ Graph newGraph()
+ Pupose:
+    creates and returns a new graph.
+ Parameters:
+ 
+ Returns:
+    Graph graph  - a pointer to a new graph.
+ Notes:
+ 
+ ********************************************************/
 Graph newGraph()
 {
     // alloc space for a new graph
@@ -22,7 +32,7 @@ void setNotVisited(Graph graph)
  Purpose:
     For each vertex in the graph, it sets the bVisited flag to FALSE.
  Parameters:
-    I  Graph graph - a pointer to the graph of flights/airports
+    I/O  Graph graph - a pointer to the graph of flights/airports
  Returns:
     N/A
  Notes:
