@@ -73,6 +73,17 @@ void addVertex(Graph g, char airport[])
     g->iNumVertices++;
 }
 
+/******************** freeGraph *************************
+ void freeGraph(Graph g)
+ Pupose:
+    free nodes in graph
+ Parameters:
+   I/O   Graph g       -   a pointer to the graph.
+ Returns:
+    None
+ Notes:
+    uses removeLL to remove node
+ ********************************************************/
 void freeGraph(Graph g)
 {
     // to iterate through each vertex
