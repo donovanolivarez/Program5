@@ -186,7 +186,7 @@ void readInput(Graph G){
         }else if(strcmp(token, "PRTONE") == 0) { // Print one airport (airport)
 
             char szApt[5];
-            int iScanCnt = sscanf(pszRemainingTxt, "%s");
+            int iScanCnt = sscanf(pszRemainingTxt, "%s", szApt);
 
             if(iScanCnt != 1){
                 errExit("Expected airport!");
