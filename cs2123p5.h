@@ -104,6 +104,15 @@ void setNotVisited(Graph graph);
 void prtFlightsByOrigin(Graph graph);
 void prtFlightsByDest(Graph graph);
 Graph newGraph();
+void addVertex(Graph graph, char airport[]);
+void prtDots(int iCount);
+int prtPredecessors(Graph g, int iVertex);
+int prtSuccessors(Graph g, int iVertex);
+
+// old linked list functions for inserts.
+EdgeNode * insertOrderedLL(EdgeNode **list, Flight flight, int iOrigin, int iDest);
+EdgeNode *searchLL(EdgeNode *list, char flightNr[], EdgeNode **ppPrecedes);
+EdgeNode *allocNodeLL(EdgeNode *list, Flight flight);
 
 // Utility routines provided by Larry in other programs
 void errExit(char szFmt[], ...);
