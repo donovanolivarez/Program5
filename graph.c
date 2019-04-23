@@ -1,6 +1,10 @@
-/*
- deals with creation and insertion into the graph.
- */
+/*********************************************************
+ graph.c by Donovan Olivarez
+ Pupose:
+    This file holds functions necessary to the creation of the graph.
+ Notes:
+    
+ *********************************************************/
 
 #include <stdio.h>
 #include <string.h>
@@ -40,7 +44,12 @@ void setNotVisited(Graph graph)
  ****************************************************************/
 void setNotVisited(Graph graph)
 {
-    // do stuff
+    // loop through vertices, set all flags to false
+    int i;
+    for (i = 0; i < graph->iNumVertices; i++)
+    {
+        graph->vertexM[i].bVisited = FALSE;
+    }
 }
 
 /******************** addVertex *************************
@@ -57,6 +66,7 @@ void setNotVisited(Graph graph)
  ********************************************************/
 void addVertex(Graph g, char airport[])
 {
+    // adds a new vertex to the graph.
     memcpy(g->vertexM[g->iNumVertices].szAirport, airport, 5);
     g->vertexM[g->iNumVertices].predecessorList = NULL;
     g->vertexM[g->iNumVertices].successorList = NULL;
