@@ -252,5 +252,6 @@ Notes:
 int main(int argc, char** argv) {
     Graph g = newGraph();
     readInput(g);
+    freeGraph(g);
     return (0);
 }
