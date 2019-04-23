@@ -1,6 +1,6 @@
 /*********************************************************
  graph.c by Donovan Olivarez
- Pupose:
+ Purpose:
     This file holds functions necessary to the creation of the graph.
  Notes:
     

@@ -1,6 +1,11 @@
-/*
- functions that use/manipulate the flight data.
- */
+/*********************************************************
+ FlightData.c by Donovan Olivarez
+ Purpose:
+    This file holds functions necessary for manipulating flight data.
+ Notes:
+    1. Functions from previous assignments are used here for inserting 
+        in the proper order.
+ *********************************************************/
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h>
@@ -68,7 +73,18 @@ int findAirport(Graph g, char airport[]){
     return -1;
 }
 
-
+/******************** insertFlight *******************
+ int insertFlight(Graph graph, Flight flight)
+ Purpose:
+ *  inserts flights based on flightNr
+ Parameters:
+ *  I/O Graph graph     - pointer to a graph
+ *  I   Flight flight   - flight information to be inserted
+ Returns:
+ *  int - zero if function works properly.
+ Notes:
+ *  1. uses insertOrderedLL to insert in the correct order.
+ *****************************************************/
 int insertFlight(Graph graph, Flight flight)
 {
     // get origin points
@@ -83,7 +99,21 @@ int insertFlight(Graph graph, Flight flight)
 
     
 
-
+/******************** insertOrderedLL *******************
+ EdgeNode * insertOrderedLL(EdgeNode **list, Flight flight, int iOrigin, int iDest)
+ Purpose:
+ *  finds where to insert specified edge node in the graph.
+ Parameters:
+ *  I/O     EdgeNode **list - double pointer to a successor or predecessor list.
+ *  I       Flight flight   - flight information
+ *  I       int iOrigin     - origin vertex
+ *  I       int iDest       - destination vertex
+ Returns:
+ *  EdgeNode *pNew  - pointer to the newly inserted node.
+ Notes:
+ *  1. This function uses searchLL to find out where in the list to insert the
+        node. This makes it easier to insert based on szFlightNr,
+ *****************************************************/
 EdgeNode * insertOrderedLL(EdgeNode **list, Flight flight, int iOrigin, int iDest)
 {
     // pPrecedes gets set to NULL in searchLL if list is empty.
@@ -115,7 +145,20 @@ EdgeNode * insertOrderedLL(EdgeNode **list, Flight flight, int iOrigin, int iDes
     return pNew;
 }
 
-
+/******************** searchLL *******************
+ EdgeNode *searchLL(EdgeNode *list, char flightNr[], EdgeNode **ppPrecedes)
+ Purpose:
+ *  Search for the correct place to insert flight information
+ Parameters:
+ *  I EdgeNode *list            -   pointer to the list specified in insertFlight.
+ *  I char flightNr[]           -   string that represents the flight we are looking for. 
+ *  I/O EdgeNode  **ppPrecedes  -   double pointer that points to the preceding node.          
+ Returns:
+ *  EdgeNode *p -   returned if node specified in parameter flightNr is found in the list.
+ *  NULL        -   if flightNr is not found.
+ Notes:
+ *  1. ppPrecedes will hold our previous node.
+ *****************************************************/
 EdgeNode *searchLL(EdgeNode *list, char flightNr[], EdgeNode **ppPrecedes)
 {
     EdgeNode *p;
@@ -137,7 +180,18 @@ EdgeNode *searchLL(EdgeNode *list, char flightNr[], EdgeNode **ppPrecedes)
     return NULL;
 }
 
-
+/******************** allocNodeLL *******************
+ EdgeNode *allocNodeLL(EdgeNode *list, Flight flight)
+ Purpose:
+ *  allocates a new node with new flight information
+ Parameters:
+ *  I/O EdgeNode *list  -   pointer to a specified list
+ *  I Flight flight     -   flight information, to be inserted
+ Returns:
+ *  EdgeNode *pNew      -   pointer to a new edge
+ Notes:
+ *  None
+ *****************************************************/
 EdgeNode *allocNodeLL(EdgeNode *list, Flight flight)
 {
     EdgeNode *pNew;
