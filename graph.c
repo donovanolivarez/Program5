@@ -72,3 +72,25 @@ void addVertex(Graph g, char airport[])
     g->vertexM[g->iNumVertices].successorList = NULL;
     g->iNumVertices++;
 }
+
+void freeGraph(Graph g)
+{
+    // to iterate through each vertex
+    int i;
+    EdgeNode *e;
+    
+    for (i = 0; i < g->iNumVertices; i++)
+    {
+        for (e = g->vertexM[i].successorList; e != NULL; e = e->pNextEdge)
+        {
+            removeLL(e);
+        }
+        
+        for (e = g->vertexM[i].predecessorList; e != NULL; e = e->pNextEdge)
+        {
+            removeLL(e);
+        }
+
+    }
+    free(g);
+}
