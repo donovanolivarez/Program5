@@ -108,6 +108,7 @@ void addVertex(Graph graph, char airport[]);
 void prtDots(int iCount);
 int prtPredecessors(Graph g, int iVertex);
 int prtSuccessors(Graph g, int iVertex);
+void freeGraph(Graph g);
 
 // old linked list functions for inserts.
 EdgeNode * insertOrderedLL(EdgeNode **list, Flight flight, int iOrigin, int iDest);
