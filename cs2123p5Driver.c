@@ -109,28 +109,6 @@ void errExit(char szFmt[], ... )
     exit(ERR_EXIT);
 }
 
-/**************** findAirport ******
- int findAirport(Graph g, char airport[])
- Purpose:
- *  Find an airport by name
- Parameters:
- *  I Graph g - graph to search
- *  I char airport[] - airport to search for
- Returns:
- *  Index of airport or -1 if it couldn't find it
- Notes:
- *  None
- */
-int findAirport(Graph g, char airport[]){
-    int i;
-    for(i = 0; i < g->iNumVertices; i++){
-        Vertex V = g->vertexM[i];
-        if(strcmp(V.szAirport, airport) == 0){
-            return i;
-        }
-    }
-    return -1;
-}
 /******************** readInput **************************************
 void readInput()
 Purpose:
